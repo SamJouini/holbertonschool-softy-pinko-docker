@@ -1,0 +1,30 @@
+version: '3.8'  # Version of Docker Compose file syntax
+
+services:
+  back-end:
+    build:
+      context: ./back-end  # Path to back-end Dockerfile and related files
+      dockerfile: Dockerfile
+    image: softy-pinko-back-end:task4
+    # Removed port mapping to host machine
+
+  front-end:
+    build:
+      context: ./front-end  # Path to front-end Dockerfile and related files
+      dockerfile: Dockerfile
+    image: softy-pinko-front-end:task4
+    # Removed port mapping to host machine
+    depends_on:
+      - back-end  # Ensures back-end is started before front-end
+
+  proxy:
+    build:
+      context: ./proxy  # Path to proxy Dockerfile and related files
+      dockerfile: Dockerfile
+    image: softy-pinko-proxy:task4
+    ports:
+      - "80:80"  # Mapping host port 80 to container port 80
+    depends_on:
+      - front-end
+      - back-end
+
